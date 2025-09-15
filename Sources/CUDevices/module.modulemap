@@ -1,0 +1,4 @@
+module "CUDevices" [system] {
+  header "bridge.h"
+  link "udev" 
+}
