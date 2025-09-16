@@ -1,10 +1,9 @@
 import CUDevices
-import System
 
 public class SystemDevices {
     private var handle: OpaquePointer!
 
-    init() throws {
+    public init() throws {
         self.handle = udev_new()
 
         guard self.handle != nil else {
@@ -18,5 +17,9 @@ public class SystemDevices {
 
     public func makeEnumerator() -> DeviceEnumerator {
         return DeviceEnumerator(handle: self.handle)
+    }
+
+    public func makeMonitor() -> DeviceMonitor {
+        return DeviceMonitor(udev: self.handle)
     }
 }

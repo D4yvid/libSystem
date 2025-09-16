@@ -37,7 +37,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_subsystem(3)`
      */
-    func match(subsystem: String) -> Self {
+    public func match(subsystem: String) -> Self {
         udev_enumerate_add_match_subsystem(self.handle, subsystem)
 
         return self
@@ -54,7 +54,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_tag(3)`
      */
-    func match(tag: String) -> Self {
+    public func match(tag: String) -> Self {
         udev_enumerate_add_match_tag(self.handle, tag)
 
         return self
@@ -71,7 +71,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_parent(3)`
      */
-    func match(parent: Device) -> Self {
+    public func match(parent: Device) -> Self {
         udev_enumerate_add_match_parent(self.handle, parent.handle)
 
         return self
@@ -86,7 +86,7 @@ public class DeviceEnumerator {
     - SeeAlso:
       - man `udev_enumerate_add_match_sysname(3)`
     */
-    func match(systemName: String) -> Self {
+    public func match(systemName: String) -> Self {
         udev_enumerate_add_match_sysname(self.handle, systemName)
 
         return self
@@ -104,7 +104,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_sysattr(3)`
      */
-    func match(attributeName: String, withValue value: String) -> Self {
+    public func match(attributeName: String, withValue value: String) -> Self {
         udev_enumerate_add_match_sysattr(self.handle, attributeName, value)
 
         return self
@@ -122,7 +122,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_property(3)`
      */
-    func match(propertyName: String, withValue value: String) -> Self {
+    public func match(propertyName: String, withValue value: String) -> Self {
         udev_enumerate_add_match_property(self.handle, propertyName, value)
 
         return self
@@ -139,7 +139,7 @@ public class DeviceEnumerator {
      - SeeAlso:
        - man `udev_enumerate_add_match_is_initialized(3)`
      */
-    func match(initialized: Bool) -> Self {
+    public func match(initialized: Bool) -> Self {
         if initialized {
             udev_enumerate_add_match_is_initialized(self.handle)
         }
@@ -154,7 +154,7 @@ public class DeviceEnumerator {
     - SeeAlso:
         - man `udev_enumerate_get_list_entry(3)`, `udev_enumerate_scan_devices(3)`
     */
-    func scanDevices() -> [Device] {
+    public func scanDevices() -> [Device] {
         udev_enumerate_scan_devices(self.handle)
         var entry = udev_enumerate_get_list_entry(self.handle)
         var devices: [Device] = []

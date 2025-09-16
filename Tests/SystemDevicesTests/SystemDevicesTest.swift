@@ -258,3 +258,80 @@ struct DeviceTreeHelper {
         }
     }
 }
+
+@Test func enumerateBlockDevices() {
+    let devices = try! SystemDevices()
+    let enumerator = devices.makeEnumerator()
+
+    _ = enumerator.match(subsystem: "block")
+
+    let blockDevices = enumerator.scanDevices()
+
+    print("Found \(blockDevices.count) block (disk) devices:")
+    print(String(repeating: "=", count: 80))
+
+    for (index, device) in blockDevices.enumerated() {
+        print("\nBlock Device \(index + 1):")
+        print(String(repeating: "-", count: 40))
+
+        if let systemName = device.systemName {
+            print("System Name: \(systemName)")
+        }
+
+        if let devicePath = device.devicePath {
+            print("Device Path: \(devicePath)")
+        }
+
+        if let deviceNode = device.deviceNode {
+            print("Device Node: \(deviceNode)")
+        }
+
+        if let subsystem = device.subsystem {
+            print("Subsystem: \(subsystem)")
+        }
+
+        if let deviceType = device.deviceType {
+            print("Device Type: \(deviceType)")
+        }
+
+        if let driver = device.driver {
+            print("Driver: \(driver)")
+        }
+
+        if let systemPath = device.systemPath {
+            print("System Path: \(systemPath)")
+        }
+
+        if let systemNumber = device.systemNumber {
+            print("System Number: \(systemNumber)")
+        }
+
+        print("Device Number: \(device.deviceNumber)")
+        print("Sequence Number: \(device.sequenceNumber)")
+        print("Initialized: \(device.initialized) (at: \(device.initializationDate))")
+
+        if !device.deviceLinks.isEmpty {
+            print("Device Links: \(device.deviceLinks.joined(separator: ", "))")
+        }
+
+        if !device.tags.isEmpty {
+            print("Tags: \(device.tags.joined(separator: ", "))")
+        }
+
+        let properties = device.deviceProperties
+        if !properties.isEmpty {
+            print("Properties:")
+            for (key, value) in properties.sorted(by: { $0.key < $1.key }) {
+                print("  \(key): \(String(describing: value))")
+            }
+        }
+
+        let attributes = device.systemAttributes
+        if !attributes.isEmpty {
+            print("System Attributes:")
+            for (key, value) in attributes.sorted(by: { $0.key < $1.key }) {
+                print("  \(key): \(String(describing: value))")
+            }
+        }
+    }
+}

@@ -9,6 +9,11 @@ let package = Package(
     products: [
         .library(name: "System", targets: ["System"]),
         .library(name: "SystemDevices", targets: ["SystemDevices"]),
+        .executable(name: "diskutil", targets: ["diskutil"]),
+    ],
+
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
     ],
 
     targets: [
@@ -27,6 +32,16 @@ let package = Package(
 
             dependencies: [
                 .target(name: "CUDevices")
+            ]
+        ),
+
+        .executableTarget(
+            name: "diskutil",
+
+            dependencies: [
+                .target(name: "System"),
+                .target(name: "SystemDevices"),
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ]
         ),
 
