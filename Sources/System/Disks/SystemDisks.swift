@@ -8,41 +8,35 @@ public class SystemDisks {
         let blockDevices = findAllBlockDevices()
         var deviceMap: [String: Disk.Builder] = [:]
 
-        loop: for device in blockDevices {
-            switch device.deviceType {
-            case "disk":
-                deviceMap[device.deviceNode!] = Disk.builder(device: device)
-                break
+        for device in blockDevices {
+            if device.deviceType == "disk" {
+                deviceMap[device.deviceNode] = Disk.builder(device: device)
 
-            case "partition":
-                var tree = getDiskTreeFor(device: device)
-                let root = tree.removeFirst()
-
-                if !deviceMap.contains(where: { $0.key == root.deviceNode }) {
-                    deviceMap[root.deviceNode!] = Disk.builder(device: root)
-                }
-
-                var current: Device? = tree.removeFirst()
-                var currentBuilder = deviceMap[root.deviceNode!]
-
-                while current != nil {
-                    let builder =
-                        Disk
-                        .builder(device: current!)
-                        .set(parent: currentBuilder!)
-
-                    _ = currentBuilder?.add(partition: builder)
-
-                    currentBuilder = builder
-                    current = tree.first != nil ? tree.removeFirst() : nil
-                }
-
-                break
-
-            default:
-                print("Unhandled device type: \(device.deviceType ?? "")")
-                continue loop
+                continue
             }
+
+            if device.deviceType == "partition" {
+                let tree = getDiskTreeFor(device: device)
+                let root = tree.first!
+
+                var currentBuilder = deviceMap[
+                    root.deviceNode, default: Disk.builder(device: root)]
+
+                // Store root builder if it doesn't exist
+                deviceMap[root.deviceNode] = currentBuilder
+
+                for current in tree.dropFirst() {
+                    let builder = Disk.builder(device: current)
+                        .set(parent: currentBuilder)
+
+                    _ = currentBuilder.add(partition: builder)
+                    currentBuilder = builder
+                }
+
+                continue
+            }
+
+            print("Unhandled device type: \(device.deviceType ?? "")")
         }
 
         return deviceMap.map { $1.build() }

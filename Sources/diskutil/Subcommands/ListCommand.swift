@@ -37,6 +37,10 @@ struct ListCommand: ParsableCommand {
             diskInfo["filesystem"] = disk.fileSystem
             diskInfo["uuid"] = disk.uniqueId
             diskInfo["device_node"] = disk.deviceNode
+            diskInfo["device"] = [
+                "systemAttributes": disk.device.systemAttributes,
+                "deviceProperties": disk.device.deviceProperties,
+            ]
 
             var partitions: [[String: Any]] = []
 

@@ -67,9 +67,9 @@ public class Device {
     ///
     /// - SeeAlso:
     /// - man `udev_device_get_devnode(3)`
-    public var deviceNode: String? {
+    public var deviceNode: String {
         guard let cStr = udev_device_get_devnode(handle) else {
-            return nil
+            return ""
         }
 
         return String(cString: cStr)

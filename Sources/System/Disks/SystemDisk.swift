@@ -1,23 +1,17 @@
 import SystemDevices
 
 public class Disk {
-    /// The parent disk (private)
-    private var _parentDisk: Disk? = nil
-
-    /// All the disk partitions
-    private var _partitions: [Disk] = []
-
     /// The underlying device of this disk
     public let device: Device
 
     /// If this disk is a partition, `parentDisk` will be the partitioned disk
-    public var parentDisk: Disk? { _parentDisk }
+    private(set) var parentDisk: Disk? = nil
 
     /// If this disk is a partition
     public var isPartition: Bool { parentDisk != nil }
 
     /// All the partitions of this specific disk
-    public var partitions: [Disk] { _partitions }
+    private(set) var partitions: [Disk] = []
 
     public var name: String {
         device.systemName!
@@ -56,7 +50,7 @@ public class Disk {
     }
 
     public var deviceNode: String {
-        device.deviceNode!
+        device.deviceNode
     }
 
     init(device: Device) {
@@ -92,12 +86,12 @@ public class Disk {
         func build(parent: Disk? = nil) -> Disk {
             let disk = Disk(device: self.device)
 
-            disk._parentDisk = parent
+            disk.parentDisk = parent
 
             let partitions = self.partitions
                 .map { $0.build(parent: disk) }
 
-            disk._partitions = partitions
+            disk.partitions = partitions
 
             return disk
         }
